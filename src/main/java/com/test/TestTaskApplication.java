@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 
 @SpringBootApplication
@@ -23,6 +24,17 @@ public class TestTaskApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws IOException {
-		taskDistributor.run();
+		boolean runProject;
+
+		if (args.length == 0) {
+			runProject = false;
+		}
+
+		runProject = Arrays
+				.stream(args)
+				.filter(f -> f.equalsIgnoreCase("true"))
+				.map(Boolean::parseBoolean).findFirst().get();
+
+		taskDistributor.run(runProject);
 	}
 }

@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface TaskDistributor {
 
-    void run() throws IOException;
+    void run(Boolean runProject) throws IOException;
 }

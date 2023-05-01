@@ -17,13 +17,13 @@ public class TaskDistributorImpl implements TaskDistributor {
     private final DepartmentService service;
 
     @Override
-    public void run() throws IOException {
+    public void run(Boolean runProject) throws IOException {
         System.out.println("### Hello University! ###");
         System.out.println("### Please use command - <help> find the right command! ###");
         System.out.println("### To finish work write - <exit>! Good luck! ###");
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        while(true) {
+        while(runProject) {
             String line = br.readLine();
 
             if (line.isEmpty()) {
@@ -34,7 +34,7 @@ public class TaskDistributorImpl implements TaskDistributor {
 
             if (line.equalsIgnoreCase("exit")) {
                 System.out.println("Bye bye!");
-                break;
+                runProject = false;
             }
         }
     }
