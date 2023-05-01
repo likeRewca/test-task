@@ -47,7 +47,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         StringBuilder answer = new StringBuilder();
 
-        answer.append("Assistans - ")
+        answer.append("Assistants - ")
                 .append(lectors.stream().filter(l -> l.getDegree().equals("assistant")).count()).append("\n");
         answer.append("Associate professors - ")
                 .append(lectors.stream().filter(l -> l.getDegree().equals("associate professor")).count()).append("\n");
@@ -104,13 +104,14 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public String help() {
         String departmentName = " <department_name>";
+        String template = " <template>";
         return new StringBuilder()
                 .append("###Only these commands are available at the moment###").append("\n\n")
                 .append(CommandConstant.DEPARTMENT_HEADER).append(departmentName).append("\n")
                 .append(String.format("Show %s statistics", "<department_name>")).append("\n")
                 .append(CommandConstant.AVG_SALARY).append(departmentName).append("\n")
                 .append(CommandConstant.EMPLOYEE_COUNT).append(departmentName).append("\n")
-                .append(CommandConstant.GLOBAL_SEARCH).append(departmentName)
+                .append(CommandConstant.GLOBAL_SEARCH).append(template)
                 .toString();
     }
 }
