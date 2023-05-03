@@ -1,8 +1,10 @@
 package com.test.services.impl;
 
-import com.test.constant.CommandConstant;
-import com.test.services.DepartmentService;
+import com.test.model.Command;
+import com.test.services.CommandStat;
 import com.test.services.TaskDistributor;
+import com.test.services.commandstat.CommandStatKeeper;
+import com.test.util.CutCommandUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +16,7 @@ import java.io.InputStreamReader;
 @RequiredArgsConstructor
 public class TaskDistributorImpl implements TaskDistributor {
 
-    private final DepartmentService service;
+    private final CommandStatKeeper commandStatKeeper;
 
     @Override
     public void run(Boolean runProject) throws IOException {
@@ -23,51 +25,24 @@ public class TaskDistributorImpl implements TaskDistributor {
         System.out.println("### To finish work write - <exit>! Good luck! ###");
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        while(runProject) {
+        while (runProject) {
             String line = br.readLine();
 
             if (line.isEmpty()) {
                 continue;
             }
 
-            commandFilter(line);
+            Command currentCommend = Command.getCommands(line);
 
-            if (line.equalsIgnoreCase("exit")) {
-                System.out.println("Bye bye!");
+            CommandStat commandStat = commandStatKeeper.get(currentCommend);
+
+            String temp = CutCommandUtil.cutCommand(currentCommend, line);
+
+            if (currentCommend.equals(Command.EXIT)) {
                 runProject = false;
             }
+
+            System.out.println(commandStat.execute(temp));
         }
-    }
-
-    private void commandFilter(String reqLine) {
-        String departmentHead;
-
-        if (reqLine.startsWith(CommandConstant.DEPARTMENT_HEADER)) {
-            System.out.println(service
-                    .getDepartmentHead(cutCommand(CommandConstant.DEPARTMENT_HEADER, reqLine)));
-        } else if (reqLine.startsWith(CommandConstant.AVG_SALARY)) {
-            System.out.println(service
-                    .averageSalary(cutCommand(CommandConstant.AVG_SALARY, reqLine)));
-        } else if (reqLine.startsWith(CommandConstant.EMPLOYEE_COUNT)) {
-            System.out.println(service
-                    .countOfEmployee(cutCommand(CommandConstant.EMPLOYEE_COUNT, reqLine)));
-        } else if (reqLine.startsWith(CommandConstant.GLOBAL_SEARCH)) {
-            System.out.println(service
-                    .searchEmployee(cutCommand(CommandConstant.GLOBAL_SEARCH, reqLine)));
-        } else if (reqLine.matches(CommandConstant.DEPARTMENT_STAT)) {
-            departmentHead = reqLine
-                    .replaceAll("Show ", "")
-                    .replaceAll(" statistics", "");
-
-            System.out.println(service.getDepartmentStat(departmentHead));
-        } else if (reqLine.equalsIgnoreCase("help")) {
-            System.out.println(service.help());
-        } else if (!reqLine.equalsIgnoreCase("exit")) {
-            System.out.println("Sorry, I don't know this command!");
-        }
-    }
-
-    private String cutCommand(String command, String reqLine) {
-        return reqLine.replaceAll(command, "").trim();
     }
 }

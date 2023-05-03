@@ -1,6 +1,6 @@
 package com.test.repositories;
 
-import com.test.entities.Lector;
+import com.test.model.entities.Lector;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
