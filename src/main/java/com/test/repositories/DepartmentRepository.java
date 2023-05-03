@@ -1,10 +1,8 @@
 package com.test.repositories;
 
-import com.test.entities.Department;
+import com.test.model.entities.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, Integer> {
